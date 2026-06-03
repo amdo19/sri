@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema SRI - Talón Resumen ATS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .table-sri-header {
+            background-color: #6A1B9A !important; /* El color morado institucional de tus capturas */
+            color: white !important;
+            font-weight: bold;
+            text-align: center;
+        }
+        .table-sri-total {
+            background-color: #F5F5F5 !important;
+            font-weight: bold;
+        }
+        .section-title {
+            background-color: #E0E0E0;
+            color: #333;
+            padding: 6px 12px;
+            font-weight: bold;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Sistema SRI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="/">Contribuyente</a></li>
+                <li class="nav-item"><a class="nav-link" href="/parametros">Parámetros</a></li>
+                <li class="nav-item"><a class="nav-link" href="/compras">Compras</a></li>
+                <li class="nav-item"><a class="nav-link" href="/ventas">Ventas</a></li>
+                <li class="nav-item"><a class="nav-link" href="/gastos">Gastos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/guias">Guías</a></li>
+                <li class="nav-item"><a class="nav-link" href="/anulados">Anulados</a></li>
+                <li class="nav-item"><a class="nav-link active fw-bold text-warning" href="/talon">Talón Resumen</a></li>
+                <li class="nav-item"><a class="nav-link" href="/formulario103">Formulario 103</a></li>
+                <li class="nav-item"><a class="nav-link" href="/formulario104">Formulario 104</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+        <div>
+            <h3 class="text-dark mb-1">Talón de Resumen - Anexo Transaccional Simplificado (ATS)</h3>
+            <p class="text-muted small mb-0">Consolidado general de transacciones registradas para la validación del DIMM.</p>
+        </div>
+        <div>
+            <a href="/talon/exportar/xml" class="btn btn-success fw-bold me-2">
+                💾 Descargar XML para DIMM
+            </a>
+            <a href="/talon/exportar/pdf" class="btn btn-danger fw-bold">
+                🖨️ Descargar Reporte PDF
+            </a>
+        </div>
+    </div>
+
+    <div class="section-title text-uppercase mt-4">Compras</div>
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered align-middle text-center mb-0">
+            <thead>
+                <tr class="table-sri-header">
+                    <th style="width: 8%;">Cód.</th>
+                    <th style="width: 32%;">Transacción</th>
+                    <th style="width: 12%;">Nº Registros</th>
+                    <th style="width: 12%;">BI tarifa 0%</th>
+                    <th style="width: 12%;">BI tarifa diferente de 0%</th>
+                    <th style="width: 12%;">BI tarifa No Objeto IVA</th>
+                    <th style="width: 12%;">BI tarifa Exenta</th>
+                    <th style="width: 12%;">Valor IVA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold">01</td>
+                    <td class="text-start">Factura</td>
+                    <td>{{ t.compras_facturas_num }}</td>
+                    <td>{{ "%.2f"|format(t.compras_facturas_base0) }}</td>
+                    <td>{{ "%.2f"|format(t.compras_facturas_baseIva) }}</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td class="text-danger fw-semibold">{{ "%.2f"|format(t.compras_facturas_iva) }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">04</td>
+                    <td class="text-start">N/C Compras</td>
+                    <td>0</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                </tr>
+                <tr class="table-sri-total">
+                    <td colspan="2" class="text-end text-uppercase">Total:</td>
+                    <td>{{ t.compras_facturas_num }}</td>
+                    <td>{{ "%.2f"|format(t.compras_facturas_base0) }}</td>
+                    <td>{{ "%.2f"|format(t.compras_facturas_baseIva) }}</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td class="text-danger">{{ "%.2f"|format(t.compras_facturas_iva) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-title text-uppercase mt-4">Ventas</div>
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered align-middle text-center mb-0">
+            <thead>
+                <tr class="table-sri-header">
+                    <th style="width: 8%;">Cód.</th>
+                    <th style="width: 32%;">Transacción</th>
+                    <th style="width: 12%;">Nº Registros</th>
+                    <th style="width: 12%;">BI tarifa 0%</th>
+                    <th style="width: 12%;">BI tarifa diferente de 0%</th>
+                    <th style="width: 12%;">BI tarifa No Objeto IVA</th>
+                    <th style="width: 12%;">BI tarifa Exenta</th>
+                    <th style="width: 12%;">Valor IVA</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold">18</td>
+                    <td class="text-start">Documentos autorizados utilizados en ventas excepto</td>
+                    <td>{{ t.ventas_num }}</td>
+                    <td>0.00</td>
+                    <td>{{ "%.2f"|format(t.ventas_baseIva) }}</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td class="text-success fw-semibold">{{ "%.2f"|format(t.ventas_iva) }}</td>
+                </tr>
+                <tr class="table-sri-total">
+                    <td colspan="2" class="text-end text-uppercase">Total:</td>
+                    <td>{{ t.ventas_num }}</td>
+                    <td>0.00</td>
+                    <td>{{ "%.2f"|format(t.ventas_baseIva) }}</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td class="text-success">{{ "%.2f"|format(t.ventas_iva) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-title text-uppercase mt-4">Resumen de Retenciones - Agente de Retención</div>
+    <div class="table-responsive mb-4">
+        <table class="table table-bordered align-middle text-center mb-0">
+            <thead>
+                <tr class="table-sri-header">
+                    <th style="width: 10%;">Cód.</th>
+                    <th style="width: 50%;">Concepto de Retención</th>
+                    <th style="width: 15%;">Nº Registros</th>
+                    <th style="width: 15%;">Base Imponible</th>
+                    <th style="width: 10%;">Valor Retenido</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold">332</td>
+                    <td class="text-start">Otras compras de bienes y servicios no sujetas a retención</td>
+                    <td>{{ t.ret_fuente_num }}</td>
+                    <td>{{ "%.2f"|format(t.ret_fuente_base) }}</td>
+                    <td>{{ "%.2f"|format(t.ret_fuente_valor) }}</td>
+                </tr>
+                <tr class="table-sri-total">
+                    <td colspan="2" class="text-end text-uppercase">Total:</td>
+                    <td>{{ t.ret_fuente_num }}</td>
+                    <td>{{ "%.2f"|format(t.ret_fuente_base) }}</td>
+                    <td>{{ "%.2f"|format(t.ret_fuente_valor) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section-title text-uppercase mt-4">Resumen de Retenciones que le efectuaron en el periodo</div>
+    <div class="table-responsive mb-0">
+        <table class="table table-bordered align-middle text-center mb-0">
+            <thead>
+                <tr class="table-sri-header">
+                    <th style="width: 20%;">Operación</th>
+                    <th style="width: 60%;">Tipo de Retención que le efectuaron</th>
+                    <th style="width: 20%;">Valor Retenido</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="fw-bold">VENTA</td>
+                    <td class="text-start">Valor de IVA que le han retenido</td>
+                    <td class="text-primary fw-semibold">{{ "%.2f"|format(t.ret_efectuada_iva) }}</td>
+                </tr>
+                <tr>
+                    <td class="fw-bold">VENTA</td>
+                    <td class="text-start">Valor de Renta que le han retenido</td>
+                    <td class="text-primary fw-semibold">{{ "%.2f"|format(t.ret_efectuada_renta) }}</td>
+                </tr>
+                <tr class="table-sri-total">
+                    <td colspan="2" class="text-end text-uppercase">Total:</td>
+                    <td class="text-primary">{{ "%.2f"|format(t.ret_efectuada_iva + t.ret_efectuada_renta) }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema SRI - Comprobantes Anulados</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Sistema SRI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="/">Contribuyente</a></li>
+                <li class="nav-item"><a class="nav-link" href="/parametros">Parámetros</a></li>
+                <li class="nav-item"><a class="nav-link" href="/compras">Compras</a></li>
+                <li class="nav-item"><a class="nav-link" href="/ventas">Ventas</a></li>
+                <li class="nav-item"><a class="nav-link" href="/gastos">Gastos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/guias">Guías</a></li>
+                <li class="nav-item"><a class="nav-link active fw-bold text-warning" href="/anulados">Anulados</a></li>
+                <li class="nav-item"><a class="nav-link" href="/talon">Talón Resumen</a></li>
+                <li class="nav-item"><a class="nav-link" href="/formulario103">Formulario 103</a></li>
+                <li class="nav-item"><a class="nav-link" href="/formulario104">Formulario 104</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <div class="card p-4 mb-4 shadow-sm border-danger">
+        <h5>Carga Masiva de Anulados (Excel)</h5>
+        <form action="/anulados/cargar" method="POST" enctype="multipart/form-data">
+            <div class="input-group">
+                <input type="file" name="archivo_excel" class="form-control" accept=".xlsx" required>
+                <button type="submit" class="btn btn-danger">Cargar Excel</button>
+            </div>
+        </form>
+    </div>
+
+    <h3 class="text-dark mb-4">Registrar Comprobantes Anulados (Formato ATS)</h3>
+    
+    <form action="/anulados/guardar" method="POST" class="bg-white p-4 shadow-sm rounded mb-5">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">Tipo de Comprobante</label>
+                <select name="tipo_comprobante" class="form-select" required>
+                    <option value="01-Factura">01-Factura</option>
+                    <option value="04-Nota de Crédito">04-Nota de Crédito</option>
+                    <option value="05-Nota de Débito">05-Nota de Débito</option>
+                    <option value="06-Guía de Remisión">06-Guía de Remisión</option>
+                    <option value="07-Comprobante de Retención">07-Comprobante de Retención</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">No. Serie Establecimiento</label>
+                <input type="text" name="establecimiento" class="form-control" placeholder="Ej: 001" maxlength="3" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">No. Serie Punto Emisión</label>
+                <input type="text" name="punto_emision" class="form-control" placeholder="Ej: 001" maxlength="3" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <label class="form-label fw-semibold">No. Serie Secuencial Desde</label>
+                <input type="text" name="secuencial_desde" class="form-control" placeholder="Ej: 000000001" required>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label class="form-label fw-semibold">No. Serie Secuencial Hasta</label>
+                <input type="text" name="secuencial_hasta" class="form-control" placeholder="Ej: 000000010" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Número Autorización S.R.I.</label>
+                <input type="text" name="numero_autorizacion" class="form-control" placeholder="Autorización física de la serie o digital si aplica" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">Tipo de Emisión del Comprobante</label>
+                <select name="tipo_emision" class="form-select">
+                    <option value="F-Fisico">F-Físico</option>
+                    <option value="E-Electronico">E-Electrónico</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">Fecha de Registro de Anulación</label>
+                <input type="date" name="fecha_anulacion" class="form-control" required>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">Periodo Declarado Form. 104</label>
+                <select name="periodo_declarado" class="form-select">
+                    <option value="NO">NO</option>
+                    <option value="SI">SI</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-md-8 mb-3">
+                <label class="form-label fw-semibold">Observaciones / Motivo de Anulación</label>
+                <input type="text" name="observaciones" class="form-control" placeholder="Ej: Error de digitación / Daño de imprenta">
+            </div>
+            <div class="col-md-4 d-flex align-items-end mb-3">
+                <button type="submit" class="btn btn-danger w-100 fw-bold shadow-sm py-2">Guardar Comprobante Anulado</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="card shadow-sm mb-5">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Historial de Comprobantes Anulados</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0 text-nowrap">
+                <thead class="table-light">
+                    <tr>
+                        <th>Tipo de Comprobante</th>
+                        <th>Establecimiento</th>
+                        <th>Punto Emisión</th>
+                        <th>Secuencial Desde</th>
+                        <th>Secuencial Hasta</th>
+                        <th>Número Autorización S.R.I.</th>
+                        <th>Tipo Emisión</th>
+                        <th>Fecha de Anulación</th>
+                        <th>Periodo Decl. Form 104</th>
+                        <th>Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in anulados %}
+                    <tr>
+                        <td class="fw-bold">{{ a[0] }}</td>
+                        <td>{{ a[1] }}</td>
+                        <td>{{ a[2] }}</td>
+                        <td>{{ a[3] }}</td>
+                        <td>{{ a[4] }}</td>
+                        <td><small class="text-muted">{{ a[5] }}</small></td>
+                        <td>{{ a[6] }}</td>
+                        <td>{{ a[7] }}</td>
+                        <td><span class="badge {% if a[8] == 'SI' %}bg-success{% else %}bg-secondary{% endif %}">{{ a[8] }}</span></td>
+                        <td><span class="text-secondary">{{ a[9] or '' }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="10" class="text-center py-3">No hay comprobantes anulados registrados todavía.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

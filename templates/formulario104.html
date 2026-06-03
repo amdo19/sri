@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>SRI en Línea - Generador Formulario 104</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sri-bg-header {
+            background-color: #f1f3f4 !important;
+            color: #3c4043;
+            font-weight: bold;
+            border-bottom: 2px solid #dadce0;
+        }
+        .sri-section-title {
+            background-color: #e8eaed;
+            color: #202124;
+            padding: 8px 15px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            border-left: 4px solid #1a73e8;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        .casillero-box {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #5f6368;
+            text-align: center;
+            width: 75px;
+        }
+        .valor-input {
+            text-align: right;
+            font-weight: 600;
+            background-color: #ffffff !important;
+        }
+        .total-row {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Sistema SRI</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="/">Contribuyente</a></li>
+                <li class="nav-item"><a class="nav-link" href="/parametros">Parámetros</a></li>
+                <li class="nav-item"><a class="nav-link" href="/compras">Compras</a></li>
+                <li class="nav-item"><a class="nav-link" href="/ventas">Ventas</a></li>
+                <li class="nav-item"><a class="nav-link" href="/gastos">Gastos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/guias">Guías</a></li>
+                <li class="nav-item"><a class="nav-link" href="/anulados">Anulados</a></li>
+                <li class="nav-item"><a class="nav-link" href="/talon">Talón Resumen</a></li>
+                <li class="nav-item"><a class="nav-link" href="/formulario103">Formulario 103</a></li>
+                <li class="nav-item"><a class="nav-link active fw-bold text-info" href="/formulario104">Formulario 104</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-3 mb-5 bg-white p-4 rounded shadow-sm">
+    <div class="border-bottom pb-3 mb-4">
+        <h4 class="text-dark mb-1">Generador de Formulario de Declaración de IVA 104</h4>
+        <p class="text-muted small mb-0">Seleccione los parámetros de la empresa y periodo fiscal para estructurar el formulario.</p>
+    </div>
+
+    <div class="card mb-4 bg-light border-secondary-subtle">
+        <div class="card-header bg-secondary text-white fw-bold">Panel de Consulta (Declaración de IVA)</div>
+        <div class="card-body">
+            <form action="/formulario104" method="POST" class="row g-3 align-items-end">
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold text-muted">Seleccionar Empresa (RUC / Razón Social):</label>
+                    <select class="form-select" name="ruc_empresa" required>
+                        <option value="" disabled selected>-- Elija una Empresa --</option>
+                        {% for emp in empresas %}
+                        <option value="{{ emp.ruc_empresa }}" {% if filtros.ruc == emp.ruc_empresa %}selected{% endif %}>
+                            {{ emp.ruc_empresa }} - {{ emp.razon_social }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold text-muted">Año Fiscal:</label>
+                    <select class="form-select" name="anio">
+                        <option value="2026" {% if filtros.anio == '2026' %}selected{% endif %}>2026</option>
+                        <option value="2025" {% if filtros.anio == '2025' %}selected{% endif %}>2025</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold text-muted">Mes Fiscal:</label>
+                    <select class="form-select" name="mes">
+                        <option value="01" {% if filtros.mes == '01' %}selected{% endif %}>Enero (01)</option>
+                        <option value="02" {% if filtros.mes == '02' %}selected{% endif %}>Febrero (02)</option>
+                        <option value="03" {% if filtros.mes == '03' %}selected{% endif %}>Marzo (03)</option>
+                        <option value="04" {% if filtros.mes == '04' %}selected{% endif %}>Abril (04)</option>
+                        <option value="05" {% if filtros.mes == '05' %}selected{% endif %}>Mayo (05)</option>
+                        <option value="06" {% if filtros.mes == '06' %}selected{% endif %}>Junio (06)</option>
+                        <option value="07" {% if filtros.mes == '07' %}selected{% endif %}>Julio (07)</option>
+                        <option value="08" {% if filtros.mes == '08' %}selected{% endif %}>Agosto (08)</option>
+                        <option value="09" {% if filtros.mes == '09' %}selected{% endif %}>Septiembre (09)</option>
+                        <option value="10" {% if filtros.mes == '10' %}selected{% endif %}>Octubre (10)</option>
+                        <option value="11" {% if filtros.mes == '11' %}selected{% endif %}>Noviembre (11)</option>
+                        <option value="12" {% if filtros.mes == '12' %}selected{% endif %}>Diciembre (12)</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-info w-100 fw-bold text-white">⚡ GENERAR 104</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if f %}
+    <div class="border p-4 bg-white rounded shadow-sm mt-4">
+        
+        <div class="row g-3 mb-4 p-3 bg-light rounded border">
+            <div class="col-md-3">
+                <label class="form-label text-muted small fw-bold">102 - AÑO</label>
+                <input type="text" class="form-control" value="{{ f.anio }}" disabled>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small fw-bold">101 - MES</label>
+                <input type="text" class="form-control" value="{{ '%02d'|format(f.mes) }}" disabled>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small fw-bold">201 - RUC</label>
+                <input type="text" class="form-control text-primary fw-bold" value="{{ f.ruc }}" disabled>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-muted small fw-bold">COMPROBANTES EMITIDOS</label>
+                <input type="text" class="form-control text-center fw-bold text-secondary" value="{{ f.c111 }}" disabled>
+            </div>
+            <div class="col-md-12 mt-2">
+                <label class="form-label text-muted small fw-bold">202 - RAZÓN SOCIAL DEL CONTRIBUYENTE</label>
+                <input type="text" class="form-control fw-bold" value="{{ f.razon_social }}" disabled>
+            </div>
+        </div>
+
+        <div class="sri-section-title">1. Resumen de Ventas y Otras Operaciones</div>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered align-middle mb-0">
+                <thead>
+                    <tr class="sri-bg-header text-center">
+                        <th>Descripción</th>
+                        <th style="width: 8%;">Casillero Neto</th>
+                        <th style="width: 18%;">Valor Neto</th>
+                        <th style="width: 8%;">Casillero Impuesto</th>
+                        <th style="width: 18%;">Impuesto Generado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Ventas locales (excluido activos fijos) gravadas con tarifa diferente de cero</td>
+                        <td class="casillero-box">411</td>
+                        <td><input type="text" class="form-control form-control-sm valor-input" value="{{ '%.2f'|format(f.c411) }}" disabled></td>
+                        <td class="casillero-box">421</td>
+                        <td><input type="text" class="form-control form-control-sm valor-input text-success" value="{{ '%.2f'|format(f.c421) }}" disabled></td>
+                    </tr>
+                    <tr class="total-row table-secondary">
+                        <td>TOTAL LIQUIDACIÓN DEL MES (Ventas y operaciones gravadas)</td>
+                        <td class="casillero-box">419</td>
+                        <td><input type="text" class="form-control form-control-sm valor-input fw-bold" value="{{ '%.2f'|format(f.c419) }}" disabled></td>
+                        <td class="casillero-box">429</td>
+                        <td><input type="text" class="form-control form-control-sm valor-input fw-bold text-success" value="{{ '%.2f'|format(f.c429) }}" disabled></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="sri-section-title">2. Resumen de Adquisiciones y Pagos (Compras)</div>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered align-middle mb-0">
+                <thead>
+                    <tr class="sri-bg-header text-center">
+                        <th>Descripción</th>
+                        <th style="width: 8%;">Casillero Neto</th>
+                        <th style="width: 18%;">Valor Neto</th>
+                        <th style="width: 8%;">Casillero Impuesto</th>
+                        <th style="width: 18%;">Impuesto Generado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Adquisiciones y pagos (excluido activos fijos) gravados tarifa diferente de cero (con derecho a crédito tributario)</td>
+                        <td class="casillero-box">510</td>
+                        <td><input type="text" class="form-control form-control-sm valor-input" value="{{ '%.2f'|format(f.c510) }}" disabled></td>
+                        <td class="casillero-box">520</td>
+                        <td><input type="text" class="form-control form-control-sm valor-input text-danger" value="{{ '%.2f'|format(f.c520) }}" disabled></td>
+                    </tr>
+                    <tr class="total-row table-secondary">
+                        <td>TOTAL ADQUISICIONES Y PAGOS</td>
+                        <td class="casillero-box">519</td>
+                        <td><input type="text" class="form-control form-control-sm valor-input fw-bold" value="{{ '%.2f'|format(f.c519) }}" disabled></td>
+                        <td class="casillero-box">529</td>
+                        <td><input type="text" class="form-control form-control-sm valor-input fw-bold text-danger" value="{{ '%.2f'|format(f.c529) }}" disabled></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row justify-content-end mb-4">
+            <div class="col-md-6 text-end align-self-center">
+                <span class="fw-semibold text-muted small">563 - FACTOR DE PROPORCIONALIDAD PARA CRÉDITO TRIBUTARIO</span>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text casillero-box">563</span>
+                    <input type="text" class="form-control text-center fw-bold" value="{{ '%.4f'|format(f.c563) }}" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="sri-section-title">3. Detalle de Crédito Tributario y Retenciones</div>
+        <div class="row g-2 justify-content-end mb-4">
+            <div class="col-md-7 text-end align-self-center">
+                <span class="text-muted small">602 - Por Adquisiciones e Importaciones (Crédito Tributario del periodo)</span>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text casillero-box">602</span>
+                    <input type="text" class="form-control valor-input text-primary" value="{{ '%.2f'|format(f.c602) }}" disabled>
+                </div>
+            </div>
+            <div class="col-md-7 text-end align-self-center mt-2">
+                <span class="text-muted small">609 - Retenciones en la fuente de IVA que le han sido efectuadas en el período</span>
+            </div>
+            <div class="col-md-3 mt-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text casillero-box">609</span>
+                    <input type="text" class="form-control valor-input text-primary" value="{{ '%.2f'|format(f.c609) }}" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="sri-section-title">4. Obligación como Agente de Retención del IVA</div>
+        <div class="row g-2 justify-content-end mb-4">
+            <div class="col-md-7 text-end align-self-center">
+                <span class="text-muted small">725 - Retención del 30% del IVA</span>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text casillero-box">725</span>
+                    <input type="text" class="form-control valor-input text-danger" value="{{ '%.2f'|format(f.c725) }}" disabled>
+                </div>
+            </div>
+            <div class="col-md-7 text-end align-self-center mt-2">
+                <span class="text-muted small">729 - Retención del 70% del IVA</span>
+            </div>
+            <div class="col-md-3 mt-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text casillero-box">729</span>
+                    <input type="text" class="form-control valor-input text-danger" value="{{ '%.2f'|format(f.c729) }}" disabled>
+                </div>
+            </div>
+            <div class="col-md-7 text-end align-self-center mt-2 fw-bold text-dark">
+                <span>799 - TOTAL IMPUESTO RETENIDO (725 + 729)</span>
+            </div>
+            <div class="col-md-3 mt-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text casillero-box bg-dark text-white">799</span>
+                    <input type="text" class="form-control valor-input fw-bold text-danger border-dark" value="{{ '%.2f'|format(f.c799) }}" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="sri-section-title">5. Resumen Impositivo y Liquidación del Pago</div>
+        <div class="row g-2 justify-content-end">
+            <div class="col-md-7 text-end align-self-center">
+                <span class="fw-semibold text-muted small">902 - IMPUESTO A PAGAR POR CONCEPTO DE IVA</span>
+            </div>
+            <div class="col-md-3">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text casillero-box">902</span>
+                    <input type="text" class="form-control valor-input fw-bold text-danger" value="{{ '%.2f'|format(f.c902) }}" disabled>
+                </div>
+            </div>
+            <div class="col-md-7 text-end align-self-center mt-2">
+                <span class="fw-bold text-dark">999 - TOTAL PAGADO</span>
+            </div>
+            <div class="col-md-3 mt-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-dark text-white fw-bold" style="width: 75px; text-align: center;">999</span>
+                    <input type="text" class="form-control valor-input fw-bold text-success border-dark fs-6" value="{{ '%.2f'|format(f.c999) }}" disabled>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% else %}
+    <div class="alert alert-info text-center mt-4 p-4" role="alert">
+        <h5 class="alert-heading">📊 ¡Estructura del IVA lista!</h5>
+        <p class="mb-0">Seleccione los filtros superiores correspondientes y presione el botón para procesar y desplegar el Formulario 104.</p>
+    </div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

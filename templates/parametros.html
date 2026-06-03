@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema SRI - Configuración</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">Sistema SRI</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="/">Contribuyente</a></li>
+                <li class="nav-item"><a class="nav-link active fw-bold text-warning" href="/parametros">Parámetros</a></li>
+                <li class="nav-item"><a class="nav-link" href="/compras">Compras</a></li>
+                <li class="nav-item"><a class="nav-link" href="/ventas">Ventas</a></li>
+                <li class="nav-item"><a class="nav-link" href="/gastos">Gastos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/guias">Guías</a></li>
+                <li class="nav-item"><a class="nav-link" href="/anulados">Anulados</a></li>
+                <li class="nav-item"><a class="nav-link" href="/talon">Talón Resumen</a></li>
+                <li class="nav-item"><a class="nav-link" href="/formulario103">Formulario 103</a></li>
+                <li class="nav-item"><a class="nav-link" href="/formulario104">Formulario 104</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h3 class="text-dark mb-4">Configuración del Informante (ATS)</h3>
+
+    <div class="card p-4 mb-4 shadow-sm border-success">
+        <h5 class="text-success">Carga Masiva de Parámetros (Excel)</h5>
+        <form action="/parametros/cargar_masivo" method="POST" enctype="multipart/form-data">
+            <div class="input-group">
+                <input type="file" name="archivo_excel" class="form-control" accept=".xlsx, .xls" required>
+                <button type="submit" class="btn btn-success">Procesar Datos Masivos</button>
+            </div>
+        </form>
+    </div>
+    
+    <form action="/parametros/guardar" method="POST" class="bg-white p-4 shadow-sm rounded mb-5">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">RUC Empresa</label>
+                <input type="text" name="ruc_empresa" class="form-control" required maxlength="13">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Razón Social</label>
+                <input type="text" name="razon_social" class="form-control" required>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label fw-semibold">Nombre Comercial</label>
+            <input type="text" name="nombre_comercial" class="form-control">
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">Email</label>
+                <input type="email" name="email_contacto" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">Teléfono</label>
+                <input type="text" name="telefonos" class="form-control">
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label fw-semibold">¿Obligado Contabilidad?</label>
+                <select name="es_obligado_contabilidad" class="form-select">
+                    <option value="SI">SI</option>
+                    <option value="NO">NO</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Año Fiscal</label>
+                <input type="number" name="periodo_fiscal" class="form-control" value="2026" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">IVA (%)</label>
+                <input type="number" step="0.01" name="iva_porcentaje" class="form-control" value="15.00" required>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm py-2">Guardar Datos del Informante</button>
+    </form>
+
+    <h4 class="mt-5 mb-3 text-primary">Historial de Configuraciones</h4>
+    <div class="table-responsive bg-white p-3 shadow-sm rounded">
+        <table class="table table-hover table-striped">
+            <thead class="table-dark">
+                <tr><th>ID</th><th>RUC</th><th>Razón Social</th><th>Email</th><th>Obligado</th><th>IVA</th></tr>
+            </thead>
+            <tbody>
+                {% for p in config_list %}
+                <tr>
+                    <td>{{ p[0] }}</td><td>{{ p[1] }}</td><td>{{ p[2] }}</td><td>{{ p[4] }}</td><td>{{ p[6] }}</td><td>{{ p[8] }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

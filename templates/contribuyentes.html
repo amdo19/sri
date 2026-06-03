@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema SRI - Gestión de Contribuyentes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold text-info" href="/">Sistema SRI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active fw-bold text-warning" href="/">Contribuyente</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/parametros">Parámetros</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/compras">Compras</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/ventas">Ventas</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/gastos">Gastos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/guias">Guías</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/anulados">Anulados</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/talon">Talón Resumen</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/formulario103">Formulario 103</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/formulario104">Formulario 104</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <h1 class="fw-bold text-primary">Módulo de Contribuyentes (SRI)</h1>
+                <p class="text-muted">Ingreso individual o carga masiva mediante plantillas de Excel ATS</p>
+            </div>
+        </div>
+
+        <div class="card p-4 mb-4 shadow-sm border-success">
+            <h5 class="text-success">Carga Masiva de Contribuyentes (Excel)</h5>
+            <form action="/contribuyente/cargar_masivo" method="POST" enctype="multipart/form-data">
+                <div class="input-group">
+                    <input type="file" name="archivo_excel" class="form-control" accept=".xlsx, .xls" required>
+                    <button type="submit" class="btn btn-success">Procesar Datos Masivos</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-12">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h5 class="card-title mb-0 fw-semibold">Registro Uno por Uno</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form action="/contribuyente/guardar_individual" method="POST">
+                            <div class="row">
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label fw-medium">No. de Identificación</label>
+                                    <input type="text" name="identificacion" class="form-control" placeholder="Ej. 0917809451001" required maxlength="13">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label fw-medium">Tipo Identificación</label>
+                                    <select name="tipo_id" class="form-select" required>
+                                        <option value="R-Ruc">R-Ruc</option>
+                                        <option value="C-Cedula">C-Cédula</option>
+                                        <option value="P-Pasaporte">P-Pasaporte</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-medium">Razón Social</label>
+                                    <input type="text" name="razon_social" class="form-control" placeholder="Nombre o Razón Social" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <label class="form-label fw-medium">Dirección</label>
+                                    <input type="text" name="direccion" class="form-control" placeholder="Ej. Av. Universitaria, Babahoyo">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label fw-medium">Tipo Proveedor</label>
+                                    <select name="tipo_proveedor" class="form-select" required>
+                                        <option value="01-Persona Natural">01-Persona Natural</option>
+                                        <option value="02-Sociedad">02-Sociedad</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100 fw-bold py-2 shadow-sm">Guardar Contribuyente</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="mt-5 mb-3 text-primary">Historial de Contribuyentes</h4>
+        <div class="table-responsive bg-white p-3 shadow-sm rounded">
+            <table class="table table-hover table-striped">
+                <thead class="table-dark">
+                    <tr><th>RUC/ID</th><th>Tipo</th><th>Razón Social</th><th>Dirección</th><th>Tipo Prov.</th></tr>
+                </thead>
+                <tbody>
+                    {% for c in contribuyentes %}
+                    <tr>
+                        <td>{{ c[0] }}</td><td>{{ c[1] }}</td><td>{{ c[2] }}</td><td>{{ c[3] }}</td><td>{{ c[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
